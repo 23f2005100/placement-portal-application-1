@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Company Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+
+  <h4>{{ company.company_name }}</h4>
+
+  <!-- OVERVIEW -->
+  <div class="card p-3 mb-4">
+    <h5>Overview</h5>
+    <p>{{ company.description or "No description added yet." }}</p>
+    <p><strong>Contact:</strong> {{ company.contact or "N/A" }}</p>
+    <p><strong>Website:</strong> {{ company.website or "N/A" }}</p>
+  </div>
+
+  <!-- EDIT PROFILE FORM -->
+  <div class="card p-3 mb-4">
+    <h5>Edit Profile</h5>
+    <form method="POST">
+      <div class="mb-3">
+        <label>Contact</label>
+        <input type="text" name="contact" class="form-control" value="{{ company.contact or '' }}">
+      </div>
+      <div class="mb-3">
+        <label>Website</label>
+        <input type="text" name="website" class="form-control" value="{{ company.website or '' }}">
+      </div>
+      <div class="mb-3">
+        <label>Description</label>
+        <textarea name="description" class="form-control">{{ company.description or '' }}</textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+  </div>
+
+  <!-- CURRENT DRIVES -->
+  <h5>Current Drives</h5>
+  {% if drives %}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Job Title</th>
+        <th>Eligibility</th>
+        <th>Deadline</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in drives %}
+      <tr>
+        <td>{{ d.job_title }}</td>
+        <td>{{ d.eligibility }}</td>
+        <td>{{ d.deadline }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="text-muted">No active drives.</p>
+  {% endif %}
+
+  <a href="/company_dashboard/{{ company.user_id }}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<h4>Student Application</h4>
+
+<p>Student Name: {{ student.fullname }}</p>
+<p>Department: {{ student.education }}</p>
+
+{% for a in student.applications %}
+<p>Drive: {{ a.drive.job_title }}</p>
+<p>Company: {{ a.drive.company.company_name }}</p>
+{% endfor %}
+
+{% if student.resume_filename %}
+<a href="/static/resumes/{{ student.resume_filename }}" class="btn btn-outline-primary">View Resume</a>
+{% endif %}
+
+<a href="/admin_dashboard" class="btn btn-secondary">Back</a>

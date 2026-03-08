@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drive Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+
+  <div class="card p-4">
+    <h4>{{ drive.job_title }}</h4>
+    <p><strong>Company:</strong> {{ drive.company.company_name }}</p>
+    <p><strong>Job Description:</strong> {{ drive.job_description }}</p>
+    <p><strong>Eligibility:</strong> {{ drive.eligibility or "N/A" }}</p>
+    <p><strong>Salary:</strong> {{ drive.salary or "N/A" }}</p>
+    <p><strong>Deadline:</strong> {{ drive.deadline }}</p>
+
+    {% if already_applied %}
+      <button class="btn btn-secondary" disabled>Already Applied</button>
+    {% else %}
+      <a href="/apply_drive/{{ drive.id }}/{{ user_id }}"
+         class="btn btn-success">
+         Apply
+      </a>
+    {% endif %}
+
+    <a href="/student_dashboard/{{ user_id }}" class="btn btn-outline-secondary ms-2">Go Back</a>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Company Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-light bg-light px-3">
+  <a class="navbar-brand">Welcome {{ company.company_name }}</a>
+  <div>
+    <a href="/company_profile/{{ company.user_id }}" class="btn btn-outline-primary">Edit Profile</a>
+    <a href="/create_drive/{{ company.user_id }}" class="btn btn-success">Create Drive</a>
+    <a href="/logout" class="btn btn-outline-dark">Logout</a>
+  </div>
+</nav>
+
+<div class="container mt-4">
+
+  <!-- COUNTS -->
+  <div class="row mb-4">
+    <div class="col">
+      <div class="card text-center p-3">
+        <h6>Pending Drives</h6>
+        <h4>{{ pending_drives|length }}</h4>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card text-center p-3">
+        <h6>Upcoming Drives</h6>
+        <h4>{{ upcoming_drives|length }}</h4>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card text-center p-3">
+        <h6>Closed Drives</h6>
+        <h4>{{ closed_drives|length }}</h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- PENDING DRIVES — waiting for admin approval -->
+  <h4 class="mt-4">Pending Drives</h4>
+  {% if pending_drives %}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Sr No.</th>
+        <th>Drive Name</th>
+        <th>Job Title</th>
+        <th>Deadline</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in pending_drives %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ d.drive_name }}</td>
+        <td>{{ d.job_title }}</td>
+        <td>{{ d.deadline }}</td>
+        <td>
+          <a href="/edit_drive/{{ d.id }}/{{ company.user_id }}" 
+             class="btn btn-outline-warning btn-sm">Edit</a>
+          <a href="/delete_drive/{{ d.id }}/{{ company.user_id }}" 
+             class="btn btn-outline-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="text-muted">No pending drives.</p>
+  {% endif %}
+
+  <!-- UPCOMING DRIVES — approved by admin -->
+  <h4 class="mt-4">Upcoming Drives</h4>
+  {% if upcoming_drives %}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Sr No.</th>
+        <th>Drive Name</th>
+        <th>Job Title</th>
+        <th>Deadline</th>
+        <th>Applicants</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in upcoming_drives %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ d.drive_name }}</td>
+        <td>{{ d.job_title }}</td>
+        <td>{{ d.deadline }}</td>
+        <td>{{ d.applications|length }}</td>
+        <td>
+          <a href="/view_applicants/{{ d.id }}" 
+             class="btn btn-outline-primary btn-sm">View Applicants</a>
+          <a href="/edit_drive/{{ d.id }}/{{ company.user_id }}" 
+             class="btn btn-outline-warning btn-sm">Edit</a>
+          <a href="/delete_drive/{{ d.id }}/{{ company.user_id }}" 
+             class="btn btn-outline-danger btn-sm">Delete</a>
+          <a href="/mark_complete/{{ d.id }}" 
+             class="btn btn-outline-success btn-sm">Mark Complete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="text-muted">No upcoming drives.</p>
+  {% endif %}
+
+  <!-- CLOSED DRIVES -->
+  <h4 class="mt-4">Closed Drives</h4>
+  {% if closed_drives %}
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Sr No.</th>
+        <th>Drive Name</th>
+        <th>Job Title</th>
+        <th>Applicants</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in closed_drives %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ d.drive_name }}</td>
+        <td>{{ d.job_title }}</td>
+        <td>{{ d.applications|length }}</td>
+        <td>
+          <a href="/view_applicants/{{ d.id }}" 
+             class="btn btn-outline-secondary btn-sm">View Applicants</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="text-muted">No closed drives.</p>
+  {% endif %}
+
+</div>
+</body>
+</html>

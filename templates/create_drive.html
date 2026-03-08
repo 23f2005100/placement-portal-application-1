@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Drive</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-4">
+<h4>Create a Drive</h4>
+
+<form method="POST">
+
+  <div class="mb-3">
+    <label>Drive Name</label>
+    <input type="text" name="name" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Job Title</label>
+    <input type="text" name="title" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Job Description</label>
+    <textarea name="description" class="form-control" required></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label>Eligibility Criteria</label>
+    <input type="text" name="eligibility" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label>Salary</label>
+    <input type="text" name="salary" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label>Application Deadline</label>
+    <input type="date" name="deadline" class="form-control" required>
+  </div>
+
+  <button class="btn btn-success">Save</button>
+
+</form>
+
+<a href="/company_dashboard/{{ company.user_id }}" class="btn btn-secondary mt-2">Back</a>
+
+</div>
+</body>
+</html>

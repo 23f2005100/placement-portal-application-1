@@ -1,0 +1,13 @@
+<h4>Student Details</h4>
+<p>Name: {{ application.student.fullname }}</p>
+<p>Education: {{ application.student.education }}</p>
+<p>Skills: {{ application.student.skills }}</p>
+<p>Drive: {{ application.drive.job_title }}</p>
+<p>Current Status: {{ application.status }}</p>
+
+<h5>Update Status</h5>
+<a href="/update_application/{{ application.id }}/Shortlisted" class="btn btn-outline-warning">Shortlist</a>
+<a href="/update_application/{{ application.id }}/Selected" class="btn btn-outline-success">Select</a>
+<a href="/update_application/{{ application.id }}/Rejected" class="btn btn-outline-danger">Reject</a>
+
+<a href="/view_applicants/{{ application.drive_id }}" class="btn btn-secondary">Back</a>
