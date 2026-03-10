@@ -1,0 +1,124 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #e8f4fd 0%, #d6eaf8 50%, #c8e6f9 100%);
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
+}
+
+#main {
+  width: 100%;
+  min-height: 100vh;
+}
+
+#canvas {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#form-body {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  width: 380px;
+  border-radius: 16px;
+  padding: 40px 36px;
+  box-shadow: 0 8px 40px rgba(100, 160, 220, 0.2);
+}
+
+#form-body h2 {
+  color: #1a3a5c;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+#form-body::before {
+  content: '🎓';
+  display: block;
+  font-size: 2.4rem;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* labels */
+.form-label {
+  color: #2c5f8a !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* inputs */
+.form-control {
+  background: rgba(255,255,255,0.85) !important;
+  border: 1px solid #b8d9f0 !important;
+  border-radius: 8px !important;
+  color: #1a3a5c !important;
+  padding: 11px 14px !important;
+  font-size: 0.95rem !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+.form-control:focus {
+  border-color: #3a8fd4 !important;
+  box-shadow: 0 0 0 3px rgba(58,143,212,0.15) !important;
+  background: #ffffff !important;
+}
+
+.form-control::placeholder {
+  color: #a0b8cc !important;
+}
+
+/* submit button */
+.btn-primary {
+  background: linear-gradient(135deg, #3a8fd4, #1a6ab5) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 11px 32px !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.03em !important;
+  box-shadow: 0 4px 14px rgba(58,143,212,0.3) !important;
+  transition: transform 0.15s, box-shadow 0.15s !important;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 20px rgba(58,143,212,0.4) !important;
+}
+
+.btn-primary:active {
+  transform: scale(0.97) !important;
+}
+
+/* register link */
+.text-center {
+  margin-top: 20px;
+  color: #5a7f9a;
+  font-size: 0.88rem;
+}
+
+.text-center a {
+  color: #1a6ab5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.text-center a:hover {
+  text-decoration: underline;
+}
+
+.mb-3 {
+  margin-bottom: 18px !important;
+}

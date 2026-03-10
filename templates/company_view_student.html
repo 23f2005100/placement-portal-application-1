@@ -1,13 +1,50 @@
-<h4>Student Details</h4>
-<p>Name: {{ application.student.fullname }}</p>
-<p>Education: {{ application.student.education }}</p>
-<p>Skills: {{ application.student.skills }}</p>
-<p>Drive: {{ application.drive.job_title }}</p>
-<p>Current Status: {{ application.status }}</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Review Application</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container mt-4">
 
-<h5>Update Status</h5>
-<a href="/update_application/{{ application.id }}/Shortlisted" class="btn btn-outline-warning">Shortlist</a>
-<a href="/update_application/{{ application.id }}/Selected" class="btn btn-outline-success">Select</a>
-<a href="/update_application/{{ application.id }}/Rejected" class="btn btn-outline-danger">Reject</a>
+  <h4>Review Application</h4>
 
-<a href="/view_applicants/{{ application.drive_id }}" class="btn btn-secondary">Back</a>
+  <!-- STUDENT DETAILS -->
+  <div class="card p-3 mb-4">
+    <h5>Student Details</h5>
+    <p><strong>Name:</strong> {{ application.student.fullname }}</p>
+    <p><strong>Education:</strong> {{ application.student.education or "N/A" }}</p>
+    <p><strong>Skills:</strong> {{ application.student.skills or "N/A" }}</p>
+    {% if application.student.resume_filename %}
+      <a href="/static/resumes/{{ application.student.resume_filename }}" class="btn btn-outline-primary btn-sm">View Resume</a>
+    {% else %}
+      <p class="text-muted">No resume uploaded.</p>
+    {% endif %}
+  </div>
+
+  <!-- DRIVE DETAILS -->
+  <div class="card p-3 mb-4">
+    <h5>Drive Details</h5>
+    <p><strong>Drive:</strong> {{ application.drive.job_title }}</p>
+    <p><strong>Company:</strong> {{ application.drive.company.company_name }}</p>
+    <p><strong>Deadline:</strong> {{ application.drive.deadline }}</p>
+  </div>
+
+  <!-- STATUS -->
+  <div class="card p-3 mb-4">
+    <h5>Application Status</h5>
+    <p><strong>Current Status:</strong> {{ application.status }}</p>
+
+    <div class="mt-3">
+      <a href="/update_application/{{ application.id }}/Shortlisted" class="btn btn-outline-warning me-2">Shortlist</a>
+      <a href="/update_application/{{ application.id }}/Selected" class="btn btn-outline-success me-2">Select</a>
+      <a href="/update_application/{{ application.id }}/Rejected" class="btn btn-outline-danger">Reject</a>
+    </div>
+  </div>
+
+  <a href="/view_applicants/{{ application.drive_id }}" class="btn btn-secondary">Back</a>
+
+</div>
+</body>
+</html>

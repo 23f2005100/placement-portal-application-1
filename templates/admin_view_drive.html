@@ -1,7 +1,27 @@
-<h2>{{ drive.job_title }}</h2>
-<p>Company: {{ drive.company.company_name }}</p>
-<p>Description: {{ drive.job_description }}</p>
-<p>Salary: {{ drive.salary }}</p>
-<p>Eligibility: {{ drive.eligibility }}</p>
-<p>Deadline: {{ drive.deadline }}</p>
-<a href="/admin_dashboard" class="btn btn-secondary">Go Back</a>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drive Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container mt-4">
+
+  <h4>Drive Details</h4>
+  <table class="table table-bordered">
+    <tr><th>Drive Name</th><td>{{ drive.drive_name }}</td></tr>
+    <tr><th>Job Title</th><td>{{ drive.job_title }}</td></tr>
+    <tr><th>Company</th><td>{{ drive.company.company_name }}</td></tr>
+    <tr><th>Description</th><td>{{ drive.job_description }}</td></tr>
+    <tr><th>Eligibility</th><td>{{ drive.eligibility or "N/A" }}</td></tr>
+    <tr><th>Salary</th><td>{{ drive.salary or "N/A" }}</td></tr>
+    <tr><th>Deadline</th><td>{{ drive.deadline }}</td></tr>
+    <tr><th>Status</th><td>{{ drive.status }}</td></tr>
+    <tr><th>Total Applicants</th><td>{{ drive.applications|length }}</td></tr>
+  </table>
+
+  <a href="/admin_dashboard" class="btn btn-secondary">Back</a>
+</div>
+</body>
+</html>

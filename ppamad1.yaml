@@ -1,0 +1,523 @@
+openapi: 3.0.0
+info:
+  title: Placement Portal API
+  version: 1.0.0
+  description: >
+    Flask web application for placement management with three roles —
+    Admin, Company, and Student. Uses session-based authentication with Jinja2 templates.
+
+paths:
+
+  # ──────────────────────────────────────────
+  # AUTH
+  # ──────────────────────────────────────────
+
+  /login:
+    get:
+      summary: Render login page
+      responses:
+        "200":
+          description: Returns login.html template
+    post:
+      summary: Authenticate user and redirect based on role
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "302":
+          description: Redirects to admin, student, or company dashboard based on role
+
+  /register:
+    get:
+      summary: Render registration page
+      responses:
+        "200":
+          description: Returns register.html template
+    post:
+      summary: Register a new student or company account
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  enum: [student, company]
+                email:
+                  type: string
+                pwd:
+                  type: string
+                name:
+                  type: string
+                  description: Required if role is student
+                company_name:
+                  type: string
+                  description: Required if role is company
+      responses:
+        "302":
+          description: Redirects to student dashboard or shows company pending message
+
+  # ──────────────────────────────────────────
+  # ADMIN
+  # ──────────────────────────────────────────
+
+  /admin_dashboard:
+    get:
+      summary: Admin dashboard — lists students, companies, drives, and pending approvals
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Search query to filter students by name/id or companies by name
+      responses:
+        "200":
+          description: Returns admin_dash.html with all data
+
+  /approve_company/{id}:
+    get:
+      summary: Approve a company registration
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: Redirects to admin dashboard
+
+  /reject_company/{id}:
+    get:
+      summary: Reject a company registration
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: Redirects to admin dashboard
+
+  /blacklist_company/{user_id}:
+    get:
+      summary: Blacklist a company and cancel all its drives
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: Redirects to admin dashboard
+
+  /blacklist_student/{user_id}:
+    get:
+      summary: Blacklist a student account
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: Redirects to admin dashboard
+
+  /approve_drive/{id}:
+    get:
+      summary: Approve a placement drive submitted by a company
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: Redirects to admin dashboard
+
+  /reject_drive/{id}:
+    get:
+      summary: Reject a placement drive
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: Redirects to admin dashboard
+
+  /view_drive/{drive_id}:
+    get:
+      summary: Admin views full details of a specific drive
+      parameters:
+        - name: drive_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns admin_view_drive.html
+
+  /view_student/{id}:
+    get:
+      summary: Admin views a specific student's profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns admin_view_student.html
+
+  # ──────────────────────────────────────────
+  # COMPANY
+  # ──────────────────────────────────────────
+
+  /company_dashboard/{user_id}:
+    get:
+      summary: Company dashboard — upcoming, pending, and closed drives
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns company_dash.html
+
+  /create_drive/{user_id}:
+    get:
+      summary: Render drive creation form
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns create_drive.html
+    post:
+      summary: Submit a new placement drive for admin approval
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                title:
+                  type: string
+                description:
+                  type: string
+                eligibility:
+                  type: string
+                salary:
+                  type: string
+                deadline:
+                  type: string
+                  example: "2025-06-30"
+      responses:
+        "302":
+          description: Redirects to company dashboard
+
+  /edit_drive/{drive_id}/{user_id}:
+    get:
+      summary: Render drive edit form
+      parameters:
+        - name: drive_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns edit_drive.html
+    post:
+      summary: Update an existing drive's details
+      parameters:
+        - name: drive_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: Redirects to company dashboard
+
+  /delete_drive/{drive_id}/{user_id}:
+    get:
+      summary: Delete a placement drive
+      parameters:
+        - name: drive_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: Redirects to company dashboard
+
+  /mark_complete/{drive_id}:
+    get:
+      summary: Mark a drive as Closed/Completed
+      parameters:
+        - name: drive_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: Redirects to company dashboard
+
+  /view_applicants/{drive_id}:
+    get:
+      summary: View all student applications for a specific drive
+      parameters:
+        - name: drive_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns company_view_applicants.html
+
+  /company_view_student/{application_id}:
+    get:
+      summary: Company views a specific student's application details
+      parameters:
+        - name: application_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns company_view_student.html
+
+  /update_application/{id}/{new_status}:
+    get:
+      summary: Update a student application status (Shortlisted / Selected / Rejected)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: new_status
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [Shortlisted, Selected, Rejected]
+      responses:
+        "302":
+          description: Redirects to view applicants page
+
+  /company_profile/{user_id}:
+    get:
+      summary: View company profile and active drives
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns company_profile.html
+    post:
+      summary: Update company profile details
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                contact:
+                  type: string
+                website:
+                  type: string
+                description:
+                  type: string
+      responses:
+        "302":
+          description: Redirects to company profile
+
+  # ──────────────────────────────────────────
+  # STUDENT
+  # ──────────────────────────────────────────
+
+  /student_dashboard/{user_id}:
+    get:
+      summary: Student dashboard — approved drives, companies, and applied drives
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns student_dash.html
+
+  /student_view_company/{company_id}/{user_id}:
+    get:
+      summary: Student views a company profile and its active drives
+      parameters:
+        - name: company_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns student_view_company.html
+
+  /student_drive/{drive_id}/{user_id}:
+    get:
+      summary: Student views details of a specific drive
+      parameters:
+        - name: drive_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns student_drive.html with apply button state
+
+  /apply_drive/{drive_id}/{user_id}:
+    get:
+      summary: Student applies to a placement drive
+      parameters:
+        - name: drive_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "302":
+          description: Redirects to student dashboard
+
+  /student_history/{user_id}:
+    get:
+      summary: View student's full application history and statuses
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns student_history.html
+
+  /edit_profile/{user_id}:
+    get:
+      summary: Render student profile edit form
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Returns student_edit_profile.html
+    post:
+      summary: Update student profile including optional resume PDF upload
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                education:
+                  type: string
+                skills:
+                  type: string
+                resume:
+                  type: string
+                  format: binary
+                  description: Optional PDF resume upload
+      responses:
+        "302":
+          description: Redirects to student dashboard
