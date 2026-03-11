@@ -10,15 +10,13 @@
 
   <h4>{{ company.company_name }}</h4>
 
-  <!-- OVERVIEW -->
   <div class="card p-3 mb-4">
     <h5>Overview</h5>
     <p>{{ company.description or "No description available." }}</p>
     <p><strong>Contact:</strong> {{ company.contact or "N/A" }}</p>
     <p><strong>Website:</strong> {{ company.website or "N/A" }}</p>
   </div>
-
-  <!-- CURRENT DRIVES -->
+  
   <h5>Current Drives</h5>
   {% if drives %}
   <table class="table table-bordered">

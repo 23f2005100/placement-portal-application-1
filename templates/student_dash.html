@@ -11,7 +11,7 @@
   <a class="navbar-brand">Welcome {{ student.fullname }}</a>
   <div>
     <a href="/edit_profile/{{ student.user_id }}" class="btn btn-outline-primary">Edit Profile</a>
-    <a href="/student_history/{{ student.user_id }}" class="btn btn-outline-secondary">History</a>
+    <a href="/student_history/{{ student.user_id }}" class="btn btn-outline-info">History</a>
     <a href="/logout" class="btn btn-outline-dark">Logout</a>
   </div>
 </nav>
@@ -34,7 +34,6 @@
     {% endif %}
   {% endfor %}
 
-  <!-- ORGANIZATIONS — list of approved companies -->
   <h4>Organizations</h4>
   {% if companies %}
   <table class="table table-bordered">
@@ -62,7 +61,6 @@
     <p class="text-muted">No companies available.</p>
   {% endif %}
 
-  <!-- APPROVED DRIVES -->
   <h4 class="mt-4">Available Drives</h4>
   {% if approved_drives %}
   <table class="table table-bordered">
@@ -96,7 +94,6 @@
     <p class="text-muted">No drives available.</p>
   {% endif %}
 
-  <!-- APPLIED DRIVES + STATUS -->
   <h4 class="mt-4">Applied Drives</h4>
   {% if applied_drives %}
   <table class="table table-striped">

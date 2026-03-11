@@ -10,7 +10,7 @@
 
   <h4>Review Application</h4>
 
-  <!-- STUDENT DETAILS -->
+
   <div class="card p-3 mb-4">
     <h5>Student Details</h5>
     <p><strong>Name:</strong> {{ application.student.fullname }}</p>
@@ -23,7 +23,6 @@
     {% endif %}
   </div>
 
-  <!-- DRIVE DETAILS -->
   <div class="card p-3 mb-4">
     <h5>Drive Details</h5>
     <p><strong>Drive:</strong> {{ application.drive.job_title }}</p>
@@ -31,7 +30,6 @@
     <p><strong>Deadline:</strong> {{ application.drive.deadline }}</p>
   </div>
 
-  <!-- STATUS -->
   <div class="card p-3 mb-4">
     <h5>Application Status</h5>
     <p><strong>Current Status:</strong> {{ application.status }}</p>

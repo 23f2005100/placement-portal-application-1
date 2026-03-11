@@ -11,6 +11,7 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
         this_user = User.query.filter_by(email=email).first()
+        session["role"] = this_user.role
 
         if this_user:
           if this_user.is_blacklisted:           # check blacklist first
@@ -23,7 +24,7 @@ def login():
               else:
                 company = Company.query.filter_by(user_id=this_user.id).first()
                 if not company.is_approved:
-                    return "Company not approved by Admin yet."
+                    return render_template("not_approved.html")
                 return redirect(f"/company_dashboard/{this_user.id}")         
           else:
              return render_template("invalid_password.html")
@@ -76,14 +77,14 @@ def admin_dashboard():
         ).all()
     else:
         all_student = Student.query.all()
-        all_company = Company.query.all()
-
+        all_company = Company.query.filter_by(is_approved=True).all()
+        
     ongoing_drives = Drive.query.filter_by(status="Approved").all()
     completed_drives = Drive.query.filter_by(status="Closed").all()
     pending_companies = Company.query.filter_by(is_approved=False).all()
     pending_drives = Drive.query.filter_by(status="Pending").all() 
-    student_applications = Application.query.filter_by(status="Applied").all()
-    total_drives = Drive.query.count(),
+    student_applications = Application.query.all()  # show all
+    total_drives = Drive.query.all()
     blacklisted_ids = {u.id for u in User.query.filter_by(is_blacklisted=True).all()}
 
     return render_template(
@@ -111,7 +112,9 @@ def approve_company(id):
 @app.route("/reject_company/<int:id>")
 def reject_company(id):
     company = Company.query.get(id)
-    company.is_approved = False  
+    user = User.query.get(company.user_id)
+    db.session.delete(company)
+    db.session.delete(user)
     db.session.commit()
     return redirect("/admin_dashboard")
 
@@ -146,6 +149,24 @@ def unblacklist_student(user_id):
 def unblacklist_company(user_id):
     user = User.query.get(user_id)
     user.is_blacklisted = False
+    db.session.commit()
+    return redirect("/admin_dashboard")
+
+@app.route("/delete_student/<int:student_id>")
+def delete_student(student_id):
+    student = Student.query.get(student_id)
+    user = User.query.get(student.user_id)
+    db.session.delete(student)
+    db.session.delete(user)
+    db.session.commit()
+    return redirect("/admin_dashboard")
+
+@app.route("/delete_company/<int:company_id>")
+def delete_company(company_id):
+    company = Company.query.get(company_id)
+    user = User.query.get(company.user_id)
+    db.session.delete(company)
+    db.session.delete(user)
     db.session.commit()
     return redirect("/admin_dashboard")
 
@@ -257,9 +278,14 @@ def edit_drive(drive_id, user_id):
         drive.job_title = request.form["title"]
         drive.job_description = request.form["description"]
         drive.eligibility = request.form["eligibility"]
+        drive.salary = request.form["salary"]      
         drive.deadline = datetime.strptime(request.form["deadline"], "%Y-%m-%d").date()
         db.session.commit()
-        return redirect(f"/company_dashboard/{user_id}")
+        
+        if session.get("role") == "admin":
+            return redirect("/admin_dashboard")
+        return redirect(f"/company_profile/{user_id}")
+    
     return render_template("edit_drive.html", drive=drive, user_id=user_id)
 
 
@@ -321,10 +347,12 @@ def company_profile(user_id):
         company.website = request.form["website"]
         company.description = request.form["description"]
         db.session.commit()
+        if session.get("role") == "admin":        # add this
+            return redirect("/admin_dashboard")
         return redirect(f"/company_profile/{user_id}")
 
     drives = Drive.query.filter_by(company_id=company.id, status="Approved").all()
-    return render_template("company_profile.html", company=company, drives=drives)
+    return render_template("company_profile.html", company=company, drives=drives, is_admin=session.get("role") == "admin")
 
 @app.route("/student_dashboard/<int:user_id>")
 def student_dashboard(user_id):
@@ -432,7 +460,10 @@ def edit_profile(user_id):
                 student.resume_filename = filename
 
         db.session.commit()
+        if session.get("role") == "admin":
+            return redirect("/admin_dashboard")
         return redirect(f"/student_dashboard/{user_id}")
+    
     return render_template("student_edit_profile.html", student=student)
 
 @app.route("/logout")

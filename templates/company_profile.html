@@ -63,8 +63,11 @@
     <p class="text-muted">No active drives.</p>
   {% endif %}
 
-  <a href="/company_dashboard/{{ company.user_id }}" class="btn btn-secondary mt-3">Back to Dashboard</a>
-
+  {% if is_admin %}
+    <a href="/admin_dashboard" class="btn btn-secondary mt-3">Back to Dashboard</a>
+  {% else %}
+    <a href="/company_dashboard/{{ company.user_id }}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+  {% endif %}
 </div>
 </body>
 </html>

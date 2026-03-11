@@ -18,7 +18,7 @@
 
 <div class="container mt-4">
 
-  <!-- COUNTS -->
+
   <div class="row mb-4">
     <div class="col">
       <div class="card text-center p-3">
@@ -28,8 +28,8 @@
     </div>
     <div class="col">
       <div class="card text-center p-3">
-        <h6>Upcoming Drives</h6>
-        <h4>{{ upcoming_drives|length }}</h4>
+        <h6>Ongoinging Drives</h6>
+        <h4>{{ ongoing_drives|length }}</h4>
       </div>
     </div>
     <div class="col">
@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <!-- PENDING DRIVES — waiting for admin approval -->
+ 
   <h4 class="mt-4">Pending Drives</h4>
   {% if pending_drives %}
   <table class="table table-bordered">
@@ -107,8 +107,6 @@
   {% endif %}
 
 
-
-  <!-- CLOSED DRIVES -->
   <h4 class="mt-4">Completed/Closed Drives</h4>
   {% if closed_drives %}
   <table class="table table-bordered">
